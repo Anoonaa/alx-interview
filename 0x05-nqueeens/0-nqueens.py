@@ -5,33 +5,40 @@ def init_board(n):
     return [[' ' for _ in range(n)] for _ in range(n)]
 
 def get_solution(board):
-    return [[r, board[r].index("Q")] for r in range(len(board))]
+    solution = []
+    for r in range(len(board)):
+        for c in range(len(board[r])):
+            if board[r][c] == 'Q':
+                solution.append([r, c])
+    return solution
 
-def xout(board, row, col):
+def is_safe(board, row, col):
     n = len(board)
-    for i in range(n):
-        board[row][i] = "x"
-        board[i][col] = "x"
-        if row + i < n and col + i < n:
-            board[row + i][col + i] = "x"
-        if row - i >= 0 and col - i >= 0:
-            board[row - i][col - i] = "x"
-        if row + i < n and col - i >= 0:
-            board[row + i][col - i] = "x"
-        if row - i >= 0 and col + i < n:
-            board[row - i][col + i] = "x"
+    for i in range(row):
+        if board[i][col] == 'Q':
+            return False
 
-def recursive_solve(board, row, queens, solutions):
-    if queens == len(board):
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 'Q':
+            return False
+
+    for i, j in zip(range(row, -1, -1), range(col, n)):
+        if board[i][j] == 'Q':
+            return False
+
+    return True
+
+def solve_nqueens(board, row, solutions):
+    n = len(board)
+    if row == n:
         solutions.append(get_solution(board))
         return
 
-    for col in range(len(board)):
-        if board[row][col] == " ":
-            tmp_board = [row[:] for row in board]
-            tmp_board[row][col] = "Q"
-            xout(tmp_board, row, col)
-            recursive_solve(tmp_board, row + 1, queens + 1, solutions)
+    for col in range(n):
+        if is_safe(board, row, col):
+            board[row][col] = 'Q'
+            solve_nqueens(board, row + 1, solutions)
+            board[row][col] = ' '
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -50,7 +57,7 @@ if __name__ == "__main__":
 
     board = init_board(N)
     solutions = []
-    recursive_solve(board, 0, 0, solutions)
+    solve_nqueens(board, 0, solutions)
     for sol in solutions:
         print(sol)
 
