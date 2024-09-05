@@ -3,13 +3,15 @@
 Prime game module.
 """
 
+
 def isWinner(x, nums):
     """
     Determines the winner of a prime game session with `x` rounds.
 
     Parameters:
     - x: Number of rounds to be played.
-    - nums: List of integers where each integer represents the upper limit of the range [1, n] for each round.
+    - nums: List of integers where each integer represents the upper 
+            limit of the range [1, n] for each round.
 
     Returns:
     - The name of the player who won the most rounds, either 'Maria' or 'Ben'. 
@@ -20,7 +22,8 @@ def isWinner(x, nums):
 
     maria_wins, ben_wins = 0, 0
 
-    # Sieve of Eratosthenes to find all prime numbers up to the maximum number in nums
+    # Use the Sieve of Eratosthenes to find all prime numbers up to the maximum
+    # number in nums
     max_num = max(nums)
     primes = [True] * (max_num + 1)
     primes[0] = primes[1] = False  # 0 and 1 are not primes
@@ -34,7 +37,7 @@ def isWinner(x, nums):
     for n in nums[:x]:
         prime_count = sum(primes[1:n + 1])  # Count primes up to n
 
-        # Maria wins if there's  an odd number of primes, otherwise Ben wins
+        # Maria wins if there is an odd number of primes, otherwise Ben wins
         if prime_count % 2 == 1:
             maria_wins += 1
         else:
@@ -47,8 +50,11 @@ def isWinner(x, nums):
         return 'Ben'
     else:
         return None
+
+
 if __name__ == "__main__":
+    # Example test case
     x = 3
     nums = [4, 5, 1]
-    print(isWinner(x, nums))  # Expected output: "Ben"
+    print(isWinner(x, nums))  # Expected output: 'Ben'
 
